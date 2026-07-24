@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- to run front end, run this html file -->
- 
+<!-- file purpose: structure -->
+
 <html lang="en">
 
 <!-- setup -->
@@ -16,15 +17,31 @@
 <!-- visible content -->
 <body>
     <h1>Password Vault v1</h1>
-    <h2>Saved Passwords</h2>
+    <h2>Saved Accounts</h2>
 
-    <!-- render saved passwords from js into div -->
-    <div id="saved-passwords"></div>
+    <!-- render saved accounts from js (stored in array) -->
+    <div id="saved-accounts"></div>
 
-    <button>Add new password</button>
+    <!-- show new account form button -->
+    <button id="show-form-btn">Add new password</button>
+
+    <!-- new account form, set to hidden -->
+    <div id="add-account-form" class="hidden">
+        <input id="website-input" type="text" placeholder="Website">
+        <input id="email-input" type="email" placeholder="Email">
+        <input id="password-input" type="text" placeholder="Password">
+        <button id="save-new-account">Save</button>
+    </div>
 
     <!-- include this line to run js-->
     <script src="script.js"></script>
 </body>
 
 </html>
+
+
+
+
+<!-- to do:
+- validation for new entries
+- during stage 2, use database instead of js array and save entries to database instead -->

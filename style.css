@@ -1,0 +1,8 @@
+/* file purpose: presentation and style */
+
+/* note: a "class" is an attribute for html elements, unlike Python class */
+
+/* class to set hidden */
+.hidden {
+    display: none;
+}
