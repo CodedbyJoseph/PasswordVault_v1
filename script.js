@@ -14,9 +14,10 @@ const savedAccounts = [
 // link var to parent html div element
 const container = document.getElementById("saved-accounts");
 
-// ------------------------------------------------------ function to render all acounts
+// ------------------------------------------------------ function to render all accounts
 function renderAccounts() {
     // clear existing entries; avoid duplicated entries on rerender
+    // this line changes container's contents (not reassignment) and changes are reflected on UI immediately
     container.innerHTML = "";
 
     // iterate thru each array entry
@@ -46,8 +47,10 @@ showFormBtn.addEventListener("click", () => {
 });
 
 // ------------------------------------------------------ save and render new entry on button click
+// link var to button
 const saveAccount = document.getElementById("save-new-account")
 saveAccount.addEventListener("click", () => {
+    // link vars to input forms
     const websiteInput = document.getElementById("website-input");
     const emailInput = document.getElementById("email-input");
     const passwordInput = document.getElementById("password-input");
