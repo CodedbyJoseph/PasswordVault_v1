@@ -14,7 +14,7 @@ const savedAccounts = [
 // link var to parent html div element
 const container = document.getElementById("saved-accounts");
 
-// ------------------------------------------------------ function to render all accounts
+// ------------------------------------------------------ FUNCTION TO RENDER ALL ACCOUNTS
 function renderAccounts() {
     // clear existing entries; avoid duplicated entries on rerender
     // innerHTML property allows us to change inner elements/contents and have them reflect immediately
@@ -45,10 +45,10 @@ function renderAccounts() {
         });
 }
 
-// ------------------------------------------------------ initial render on page load
+// ------------------------------------------------------ INITIAL RENDER ON PAGE LOAD
 renderAccounts();
 
-// ------------------------------------------------------ unhide account form on button click
+// ------------------------------------------------------ UNHIDE ACCOUNT FORM ON BUTTON CLICK
 // link vars to button and form
 const showFormBtn = document.getElementById("show-form-btn");
 const form = document.getElementById("add-account-form");
@@ -58,40 +58,54 @@ showFormBtn.addEventListener("click", () => {
     form.classList.remove("hidden");
 });
 
-
+// ------------------------------------------------------ FUNCTION TO VALIDATE ENTRY INPUTS
 // link var to html error message
 const errorMessage = document.getElementById("err-msg")
 
-// ------------------------------------------------------ function to validate entry inputs
 function validateEntry() {
     // hide error message if not already hidden
-    form.classList.add("hidden");
+    errorMessage.classList.add("hidden");
 
-    // check if any input box is empty
-    // if empty, return false, else return true
-    // update button click to only act on true
-}
-
-
-// ------------------------------------------------------ save and render new entry on button click
-// link var to button
-const saveAccount = document.getElementById("save-new-account")
-saveAccount.addEventListener("click", () => {
     // link vars to input forms
     const websiteInput = document.getElementById("website-input");
     const emailInput = document.getElementById("email-input");
     const passwordInput = document.getElementById("password-input");
 
-    // append new entry values into saved accounts array
-    savedAccounts.push({
-        site: websiteInput.value,
-        username: emailInput.value,
-        password: passwordInput.value
-    });
+    // check if any input form was not filled
+    if (websiteInput.value === "" || emailInput.value === "" || passwordInput.value === "") {
+        return [false];
+    }
+
+    return [true, websiteInput.value, emailInput.value, passwordInput.value];
+}
+
+
+// ------------------------------------------------------ SAVE AND RENDER NEW ENTRY ON BUTTON CLICK
+// link var to button
+const saveAccount = document.getElementById("save-new-account")
+
+// button click event
+saveAccount.addEventListener("click", () => {
+    // link var to boolean and input values
+    // in case of inValid === false, next three elements of array === undefined
+    const [isValid, site, username, password] = validateEntry()
+
+    // check is valid
+    if (isValid === true) {
+        // append new entry into saved accounts
+        savedAccounts.push({
+            site: site,
+            username: username,
+            password: password
+        });
+    }
+
+    // check is invalid
+    else {
+        // unhide error message
+        errorMessage.classList.remove("hidden");
+    }
 
     // rerender to show the new entry
     renderAccounts();
 });
-
-// ------------------------------------------------------ unhide error message on invalid entry
-
