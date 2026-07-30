@@ -37,6 +37,11 @@ function renderAccounts() {
         const password = document.createElement("span");
         password.textContent = `Password: ${entry.password}`;
 
+        // add corresponding classes to style each part
+        site.classList.add("style-site");
+        username.classList.add("style-username");
+        password.classList.add("style-password");
+
         // append each text to row as one line, append row to parent div
         row.appendChild(site);
         row.appendChild(username);
@@ -82,7 +87,7 @@ function validateEntry() {
 
 // ------------------------------------------------------ SAVE AND RENDER NEW ENTRY ON BUTTON CLICK
 // link var to button
-const saveAccount = document.getElementById("save-new-account")
+const saveAccount = document.getElementById("save-new-account-btn")
 
 // button click event
 saveAccount.addEventListener("click", () => {
@@ -93,11 +98,9 @@ saveAccount.addEventListener("click", () => {
     // check is valid
     if (isValid === true) {
         // append new entry into saved accounts
-        savedAccounts.push({
-            site: site,
-            username: username,
-            password: password
-        });
+        savedAccounts.push(
+            {site: site, username: username, password: password}
+        );
     }
 
     // check is invalid

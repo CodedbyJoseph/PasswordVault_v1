@@ -2,7 +2,121 @@
 
 /* note: a "class" is an attribute for html elements, unlike Python class */
 
+
+/* ------------------------------------------------------ CLASSES */
+/* class to stack elements horizontally */
+.page-container {
+    display: flex;
+}
+
+/* set element width to half of parent */
+.left-panel {
+    width: 50%;
+}
+
+.right-panel {
+    width: 50%;
+}
+
 /* class to set hidden */
 .hidden {
     display: none;
 }
+
+/* class to style site */
+.style-site {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    color: #2c2c34;
+    margin-right: 12px;
+}
+
+/* class to style username */
+.style-username {
+    font-family: 'Nunito', sans-serif;
+    color: #2c2c34;
+    margin-right: 12px;
+}
+
+/* class to style password */
+.style-password {
+    font-family: monospace;
+    color: #2c2c34;
+}
+
+/* style rendered accounts with proportional padding */
+#saved-accounts {
+    /* automatically proportional to width of parent (left panel) */
+    padding-left: 20%;
+}
+
+/* style show form button */
+#show-form-btn {
+    font: inherit;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    color: #2c2c34;
+}
+
+/* add hover state colour */
+#show-form-btn:hover {
+    color: #7a1fcc;
+}
+
+/* style error message */
+#err-msg h4 {
+    margin-top: 0;
+    font-family: 'Nunito', sans-serif;
+    color: #e63950;
+}
+
+/* style input fields */
+#add-account-form input {
+    font: inherit;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    color: #2c2c34;
+}
+
+/* style save button */
+#save-new-account-btn {
+    font: inherit;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    color: #2c2c34;
+}
+
+/* add hover state colour */
+#save-new-account-btn:hover {
+    color: #7a1fcc;
+}
+
+/* h1 tag */
+h1 {
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    color: #9b30ff;
+}
+
+/* h2 tag */
+h2 {
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    color: #2c2c34;
+}
+
+/* background */
+body {
+    background-color: #e0d9f0;
+}
+
+/*
+headings/buttons	#9b30ff
+hover/active states	#7a1fcc
+Background	        #e0d9f0
+Text	            #2c2c34
+Error	            #e63950
+Border/divider	    #d8cdf0
+*/
