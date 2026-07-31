@@ -3,7 +3,13 @@
 /* note: a "class" is an attribute for html elements, unlike Python class */
 
 
-/* ------------------------------------------------------ CLASSES */
+/* ------------------------------------------------------ CLASS RULES */
+/* class to stack horizontally right aligned */
+.right-align {
+    display: flex;
+    justify-content: flex-end;
+}
+
 /* class to stack elements horizontally */
 .page-container {
     display: flex;
@@ -44,6 +50,7 @@
     color: #2c2c34;
 }
 
+/* ------------------------------------------------------ ID RULES */
 /* style rendered accounts with proportional padding */
 #saved-accounts {
     /* automatically proportional to width of parent (left panel) */
@@ -91,6 +98,38 @@
     color: #7a1fcc;
 }
 
+/* style log in button */
+#log-in-btn {
+    font: inherit;
+    color: #2c2c34;
+    background-color: #9b30ff;
+    font-family: 'Nunito', sans-serif;
+    border-radius: 15px;
+    font-weight: 600;
+    padding: 8px 16px;
+    margin-right: 2px
+}
+
+/* style sign up button */
+#sign-up-btn {
+    font: inherit;
+    color: #2c2c34;
+    background-color: #ff69b4;
+    font-family: 'Nunito', sans-serif;
+    border-radius: 15px;
+    font-weight: 600;
+    padding: 8px 16px;
+}
+
+#log-in-btn:hover {
+    color: #e0d9f0;
+}
+
+#sign-up-btn:hover {
+    color: #e0d9f0;
+}
+
+/* ------------------------------------------------------ ELEMENT RULES */
 /* h1 tag */
 h1 {
     text-align: center;
