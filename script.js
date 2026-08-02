@@ -8,7 +8,7 @@
 const savedAccounts = [
     { site: "Gmail", username: "test@gmail.com", password: "hunter2" },
     { site: "Netflix", username: "testuser", password: "letmein123" },
-    { site: "GitHub", username: "test-dev", password: "password1" }
+    { site: "GitHub", username: "test-dev", password: "password1" },
 ];
 
 // link var to parent html div element
@@ -21,8 +21,9 @@ function renderAccounts() {
     // container still points to same object
     container.innerHTML = "";
 
-    // iterate thru each array entry
-    savedAccounts.forEach(entry => {
+    // iterate thru each array entry and index
+    // forEach can has three potential parameters (element, index, array)
+    savedAccounts.forEach((entry, index) => {
         // create div element
         const row = document.createElement("div");
 
@@ -37,17 +38,29 @@ function renderAccounts() {
         const password = document.createElement("span");
         password.textContent = `Password: ${entry.password}`;
 
+        // add delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+
         // add corresponding classes to style each part
         site.classList.add("style-site");
         username.classList.add("style-username");
         password.classList.add("style-password");
+        deleteBtn.classList.add("style-delete");
 
-        // append each text to row as one line, append row to parent div
+        // append each text/button to row (forms as one line), append row to parent div
         row.appendChild(site);
         row.appendChild(username);
         row.appendChild(password);
+        row.appendChild(deleteBtn);
         container.appendChild(row);
+
+        // new event listener on each iteration, each button gets own listener and captured index
+        deleteBtn.addEventListener("click", () => {
+            savedAccounts.splice(index, 1); // starting at position 'index', remove 1 item (removes corresponding entry)
+            renderAccounts();
         });
+    });
 }
 
 // ------------------------------------------------------ INITIAL RENDER ON PAGE LOAD

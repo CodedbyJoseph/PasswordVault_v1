@@ -26,42 +26,36 @@
     </div>
     <h1>Password Vault v1</h1>
 
-    <!-- split page into left and right half -->
-    <div class="page-container">
+    <!-- top -->
+    <div class="top-panel">
+        <h2>Saved Accounts</h2>
+        <!-- render saved accounts from js (stored in array) -->
+        <div id="saved-accounts"></div>
+    </div>
 
-        <!-- left -->
-        <div class="left-panel">
-            <h2>Saved Accounts</h2>
-            <!-- render saved accounts from js (stored in array) -->
-            <div id="saved-accounts"></div>
+    <!-- bottom -->
+    <div class="bottom-panel">
+        <h2>Actions</h2>
+        <!-- show new account form button -->
+        <button id="show-form-btn">Add new password</button>
+
+        <!-- new account form, set to hidden -->
+        <div id="add-account-form" class="hidden">
+            <input id="website-input" type="text" placeholder="Website">
+            <input id="email-input" type="email" placeholder="Email">
+            <input id="password-input" type="text" placeholder="Password">
+            <button id="save-new-account-btn">Save</button>
         </div>
 
-        <!-- right -->
-        <div class="right-panel">
-            <h2>Actions</h2>
-            <!-- show new account form button -->
-            <button id="show-form-btn">Add new password</button>
-
-            <!-- new account form, set to hidden -->
-            <div id="add-account-form" class="hidden">
-                <input id="website-input" type="text" placeholder="Website">
-                <input id="email-input" type="email" placeholder="Email">
-                <input id="password-input" type="text" placeholder="Password">
-                <button id="save-new-account-btn">Save</button>
-            </div>
-
-            <!-- error message, set to hidden -->
-            <div id="err-msg" class="hidden">
-                <h4>Error</h4>
-            </div>
+        <!-- error message, set to hidden -->
+        <div id="err-msg" class="hidden">
+            <h4>Error</h4>
         </div>
-
     </div>
     
 
     <!-- to do:
      - remove accounts option
-     - add functionality to log in buttons
 - during stage 2, use database instead of js array and save entries to database instead -->
 
     <!-- include this line to run js-->
