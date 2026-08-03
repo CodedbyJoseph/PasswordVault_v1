@@ -1,8 +1,8 @@
 // file purpose:
 // behaviour
 // render to html
-// store temporary data
-// fetch from python
+// STAGE 1: store temporary data
+// STAGE 2: fetch from python
 
 // save user accounts into array, mutable
 const savedAccounts = [
@@ -22,7 +22,7 @@ function renderAccounts() {
     container.innerHTML = "";
 
     // iterate thru each array entry and index
-    // forEach can has three potential parameters (element, index, array)
+    // forEach can have three potential parameters (element, index, array)
     savedAccounts.forEach((entry, index) => {
         // create div element
         const row = document.createElement("div");

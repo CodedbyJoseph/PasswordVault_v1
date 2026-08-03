@@ -1,4 +1,4 @@
-# Python packages this app depends on (must be pip installed)
+# Python packages (must be pip installed)
 # Vercel reads this file at deploy time and installs everything into its infrastructure allocated for this app 
 
 fastapi
