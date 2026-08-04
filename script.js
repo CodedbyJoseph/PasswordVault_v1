@@ -2,7 +2,7 @@
 // behaviour
 // render to html
 // STAGE 1: store temporary data
-// STAGE 2: fetch from python
+// STAGE 2: fetch account data from python
 
 // save user accounts into array, mutable
 const savedAccounts = [
