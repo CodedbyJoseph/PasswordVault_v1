@@ -1,5 +1,5 @@
 # Python packages (must be pip installed)
-# Vercel reads this file at deploy time and installs everything into its infrastructure allocated for this app 
+# Vercel dev / deploy installs everything in this file into its infrastructure allocated for this app 
 
-fastapi
-supabase
+fastapi~=0.141.1
+supabase~=2.31.0
