@@ -44,3 +44,15 @@ APP RUN
 local dev:              python cmd  |  vercel dev
 deployed:                     NONE  |  vercel
 ```
+
+
+Vercel Dev Notes:
+this app requires public and api folder
+1. npm install -g vercel — the CLI.
+2. vercel login — authenticates your machine to your Vercel account.
+3. cd into the project folder.
+4. vercel dev — on first run it prompts:
+    - Set up and develop this project? → Enter
+    - Which scope? → your account
+    - Link to existing project? → No, if it's new
+    - Project name / directory → Enter for defaults

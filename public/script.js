@@ -1,15 +1,28 @@
 // file purpose:
 // behaviour
 // render to html
-// STAGE 1: store temporary data
+// STAGE 1: store hardcoded nonpersisting data
 // STAGE 2: fetch account data from python
 
+
+// load accounts from database
+// save new entries to database
+// save new deletions to database
+// if initial UI loads too long, add load screen
+
+// fetch: starts the retrieval request and immediately returns a Promise (empty placeholder) and continues code execution
+// await: do not move on until real data substitutes the promise
+// await must be used within async function
+// calling the function w/o await will return a promise and move on
+
 // save user accounts into array, mutable
-const savedAccounts = [
-    { site: "Gmail", username: "test@gmail.com", password: "hunter2" },
-    { site: "Netflix", username: "testuser", password: "letmein123" },
-    { site: "GitHub", username: "test-dev", password: "password1" },
-];
+let savedAccounts = [];
+
+// function to fetch ore re-fetch supabase data into savedAccounts as array of dictionaries/objects
+async function loadAccounts() {
+    const response = await fetch("/api/accounts");
+    savedAccounts = await response.json();  // [{id: 1, site: __, username: __, password: __}]
+}
 
 // link var to parent html div element
 const container = document.getElementById("saved-accounts");
@@ -55,16 +68,22 @@ function renderAccounts() {
         row.appendChild(deleteBtn);
         container.appendChild(row);
 
-        // new event listener on each iteration, each button gets own listener and captured index
+        // new event listener that persists on each iteration, each button gets own listener and captured index
         deleteBtn.addEventListener("click", () => {
             savedAccounts.splice(index, 1); // starting at position 'index', remove 1 item (removes corresponding entry)
             renderAccounts();
+
+
+            // FETCH FOR DEELTE, THEN LOAD, THEN RENDER
         });
     });
 }
 
 // ------------------------------------------------------ INITIAL RENDER ON PAGE LOAD
-renderAccounts();
+// loadaccounts and await real values (has promise due to async func above), then renderaccounts
+loadAccounts().then(renderAccounts);
+
+// note: can't use await here due to 
 
 // ------------------------------------------------------ UNHIDE ACCOUNT FORM ON BUTTON CLICK
 // link vars to button and form
@@ -103,17 +122,22 @@ function validateEntry() {
 const saveAccount = document.getElementById("save-new-account-btn")
 
 // button click event
-saveAccount.addEventListener("click", () => {
+saveAccount.addEventListener("click", async () => {
     // link var to boolean and input values
     // in case of inValid === false, next three elements of array === undefined
     const [isValid, site, username, password] = validateEntry()
 
     // check is valid
     if (isValid === true) {
-        // append new entry into saved accounts
-        savedAccounts.push(
-            {site: site, username: username, password: password}
-        );
+        // post new entry into database
+        await fetch("/api/accounts", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({site, username, password})
+        });
+
+        // re-load accounts and do not move on until response fills promise
+        await loadAccounts();
     }
 
     // check is invalid
