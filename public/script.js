@@ -4,10 +4,8 @@
 // STAGE 1: store hardcoded nonpersisting data
 // STAGE 2: fetch account data from python
 
-
-// load accounts from database
-// save new entries to database
-// save new deletions to database
+// clear form inputs
+// response.ok checks
 // if initial UI loads too long, add load screen
 
 // fetch: starts the retrieval request and immediately returns a Promise (empty placeholder) and continues code execution
@@ -36,7 +34,7 @@ function renderAccounts() {
 
     // iterate thru each array entry and index
     // forEach can have three potential parameters (element, index, array)
-    savedAccounts.forEach((entry, index) => {
+    savedAccounts.forEach((entry) => {
         // create div element
         const row = document.createElement("div");
 
@@ -69,12 +67,13 @@ function renderAccounts() {
         container.appendChild(row);
 
         // new event listener that persists on each iteration, each button gets own listener and captured index
-        deleteBtn.addEventListener("click", () => {
-            savedAccounts.splice(index, 1); // starting at position 'index', remove 1 item (removes corresponding entry)
+        deleteBtn.addEventListener("click", async () => {
+            // delete row from database by id
+            await fetch(`/api/accounts/${entry.id}`, {method: "DELETE"});
+
+            // re-load accounts, then re-render
+            await loadAccounts();
             renderAccounts();
-
-
-            // FETCH FOR DEELTE, THEN LOAD, THEN RENDER
         });
     });
 }
@@ -133,7 +132,7 @@ saveAccount.addEventListener("click", async () => {
         await fetch("/api/accounts", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({site, username, password})
+            body: JSON.stringify({site: site, username: username, password: password})
         });
 
         // re-load accounts and do not move on until response fills promise
