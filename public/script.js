@@ -4,10 +4,6 @@
 // STAGE 1: store hardcoded nonpersisting data
 // STAGE 2: fetch account data from python
 
-// clear form inputs
-// response.ok checks
-// if initial UI loads too long, add load screen
-
 // fetch: starts the retrieval request and immediately returns a Promise (empty placeholder) and continues code execution
 // await: do not move on until real data substitutes the promise
 // await must be used within async function
@@ -16,7 +12,12 @@
 // save user accounts into array, mutable
 let savedAccounts = [];
 
-// function to fetch ore re-fetch supabase data into savedAccounts as array of dictionaries/objects
+// link vars to each input box element
+const websiteInput = document.getElementById("website-input");
+const emailInput = document.getElementById("email-input");
+const passwordInput = document.getElementById("password-input");
+
+// function to fetch or re-fetch supabase data into savedAccounts as array of dictionaries/objects
 async function loadAccounts() {
     const response = await fetch("/api/accounts");
     savedAccounts = await response.json();  // [{id: 1, site: __, username: __, password: __}]
@@ -82,7 +83,7 @@ function renderAccounts() {
 // loadaccounts and await real values (has promise due to async func above), then renderaccounts
 loadAccounts().then(renderAccounts);
 
-// note: can't use await here due to 
+// note: can't use await here b/c we are calling async func
 
 // ------------------------------------------------------ UNHIDE ACCOUNT FORM ON BUTTON CLICK
 // link vars to button and form
@@ -102,11 +103,6 @@ function validateEntry() {
     // hide error message if not already hidden
     errorMessage.classList.add("hidden");
 
-    // link vars to input forms
-    const websiteInput = document.getElementById("website-input");
-    const emailInput = document.getElementById("email-input");
-    const passwordInput = document.getElementById("password-input");
-
     // check if any input form was not filled
     if (websiteInput.value === "" || emailInput.value === "" || passwordInput.value === "") {
         return [false];
@@ -122,8 +118,8 @@ const saveAccount = document.getElementById("save-new-account-btn")
 
 // button click event
 saveAccount.addEventListener("click", async () => {
-    // link var to boolean and input values
-    // in case of inValid === false, next three elements of array === undefined
+    // link vars to boolean and input values
+    // in case of isValid === false, next three elements of array === undefined
     const [isValid, site, username, password] = validateEntry()
 
     // check is valid
@@ -135,8 +131,15 @@ saveAccount.addEventListener("click", async () => {
             body: JSON.stringify({site: site, username: username, password: password})
         });
 
+        websiteInput.value = "";
+        emailInput.value = "";
+        passwordInput.value = "";
+
         // re-load accounts and do not move on until response fills promise
         await loadAccounts();
+
+        // re-render
+        renderAccounts();
     }
 
     // check is invalid
@@ -144,7 +147,4 @@ saveAccount.addEventListener("click", async () => {
         // unhide error message
         errorMessage.classList.remove("hidden");
     }
-
-    // rerender to show the new entry
-    renderAccounts();
 });
