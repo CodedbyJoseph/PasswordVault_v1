@@ -19,12 +19,12 @@ deployed   |  vercel
 ## Stages of development / Workflow
 
 ```
-Stage               |                             |  Run/Test
-UI                  |  html, css, js              |  fake hardcoded data, live server
-logic and database  |  python, fastAPI, supabase  |  vercel dev
-auth                |  html, css, js, python      |  vercel dev
-link components     |  html, css, js, python      |  vercel dev
-deploy              |  push to vercel             |  vercel --prod
+STAGE               |  COMPONENTS                           |  RUN/TEST
+UI                  |  html, css, js                        |  fake hardcoded data, live server
+logic and database  |  python, js fetch, fastAPI, supabase  |  real database, vercel dev
+auth                |  html, css, js, python                |  vercel dev
+link components     |  html, css, js, python                |  vercel dev
+deploy              |  push to vercel                       |  vercel --prod
 ```
 
 ## Comparison: Expense Tracker v2 vs Password Vault v1
