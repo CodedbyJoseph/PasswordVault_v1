@@ -22,7 +22,7 @@ deployed   |  vercel
 STAGE                 |  COMPONENTS                           |  RUN/TEST
 UI                    |  html, css, js                        |  fake hardcoded data, live server
 logic and database    |  python, js fetch, fastAPI, supabase  |  real database, vercel dev
-auth + per-user data  |  html, css, js, python                |  vercel dev
+auth + per-user data  |  html, css, js, python, google oauth  |  vercel dev
 link components       |  html, css, js, python                |  vercel dev
 deploy                |  push to vercel                       |  vercel --prod
 ```

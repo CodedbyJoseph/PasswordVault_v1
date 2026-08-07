@@ -5,7 +5,7 @@
 # - RESTful API
 
 # FastAPI framework automates:
-# - parse raw incoming HTTP requests, 
+# - parse raw incoming HTTP requests
 # - figure out which URL/method was requested
 # - convert Python data into JSON text for the response
 # - parse incoming JSON request bodies into Python objects
@@ -14,21 +14,23 @@ from fastapi import FastAPI
 from supabase import create_client
 import os
 
-# create and store client object connected to Supabase project
+# create var to link to Supabase project
 supabase = create_client(
     os.environ.get("SUPABASE_URL"), # retrieve supabase url (read from env)
     os.environ.get("SUPABASE_KEY")  # retrieve supabase key (read from env)
 )
 
-# create an instance of FastAPI class
-# vercel listens for http requests (js fetches) and passes them to app using vercel.json rules (any path starting with '/api/' goes to index.py)
+# create serverless function:
+# at build time, vercel scans /api and looks for ASGI callable "app" as the entry point
+# at request time, vercel.json routes any /api/* path to this file
+# FastAPI then matches the method + path to the right @app function below
 app = FastAPI()
 
 # @app decorators register functions to be automatically called when a js fetch is made
 # each fetch type calls a function (ex. get request calls get function)
 
 # function to call Supabase API to read and return accounts table data
-@app.get("/api/accounts")
+@app.get("/api/accounts")   # "/api" required by vercel.json rewrite, "/accounts" personally named
 def get_accounts():
     response = supabase.table("accounts_table").select("*").execute()
     return response.data        # list of dictionaries [{"id": 1, "site": __, "username": __, "password": __}]

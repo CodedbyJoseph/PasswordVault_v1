@@ -6,13 +6,13 @@ This is a learning project — kept intentionally simple, with no security consi
 
 ## Stack
 
-| Layer      | Tech                          |
-|------------|--------------------------------|
-| Frontend   | HTML, CSS, JavaScript          |
-| Backend    | Python + FastAPI               |
-| Auth       | Google OAuth + master password |
-| Database   | Supabase (Postgres)            |
-| Hosting    | Vercel                         |
+| Layer      | Tech                      |
+|------------|---------------------------|
+| Frontend   | HTML, CSS, JavaScript     |
+| Backend    | Python + FastAPI          |
+| Auth       | Google OAuth              |
+| Database   | Supabase (Postgres)       |
+| Hosting    | Vercel                    |
 
 ## How it works
 
