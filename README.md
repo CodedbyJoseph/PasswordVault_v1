@@ -17,8 +17,7 @@ This is a learning project — kept intentionally simple, with no security consi
 ## How it works
 
 1. User signs up / logs in with Google OAuth.
-2. User enters a master password to unlock their vault.
-3. User can view, add, and manage saved passwords.
+2. User can view, add, and manage saved passwords in their vault.
 
 ## How to run
 
