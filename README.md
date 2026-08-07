@@ -1,6 +1,6 @@
 # Password Vault v1
 
-A simple full-stack password vault. Users sign in with Google, then unlock their saved passwords with a separate master password.
+A simple full-stack password vault. Users sign in with Google.
 
 This is a learning project — kept intentionally simple, with no security considerations
 
