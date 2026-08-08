@@ -17,7 +17,7 @@ const websiteInput = document.getElementById("website-input");
 const emailInput = document.getElementById("email-input");
 const passwordInput = document.getElementById("password-input");
 
-// function to fetch or re-fetch supabase data into savedAccounts as array of dictionaries/objects
+// ------------------------------------------------------ FUNCTION TO FETCH SUPABASE DATA INTO savedAccounts
 async function loadAccounts() {
     const response = await fetch("/api/accounts");
     savedAccounts = await response.json();  // [{id: 1, site: __, username: __, password: __}]
@@ -67,7 +67,7 @@ function renderAccounts() {
         row.appendChild(deleteBtn);
         container.appendChild(row);
 
-        // new event listener that persists on each iteration, each button gets own listener and captured index
+        // new event listener that persists on each iteration, each button gets own listener
         deleteBtn.addEventListener("click", async () => {
             // delete row from database by id
             await fetch(`/api/accounts/${entry.id}`, {method: "DELETE"});
