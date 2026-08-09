@@ -17,7 +17,8 @@ import os
 # ------------------------------------------------------ LINK SUPABASE PROJECT
 supabase = create_client(
     os.environ.get("SUPABASE_URL"), # retrieve supabase url (read from env)
-    os.environ.get("SUPABASE_KEY")  # retrieve supabase key (read from env)
+    os.environ.get("SUPABASE_KEY")  # retrieve supabase service_role key (read from env)
+    # this key ignores rls (security measure that prevents supabase data access w/o policies)
 )
 
 # ------------------------------------------------------ INITIATE SERVERLESS FUNCTION

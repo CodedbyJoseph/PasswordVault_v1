@@ -27,6 +27,15 @@ link components       |  html, css, js, python                |  vercel dev
 deploy                |  push to vercel                       |  vercel --prod
 ```
 
+## SECURITY MODEL
+```
+trust boundary  |  FastAPI (the only path to accounts_table)
+SUPABASE_KEY    |  service_role, bypasses RLS, server-only, never in public/
+RLS             |  on, no policies — locks public anon key in js from data access
+row scoping     |  .eq("user_id", uid) in api/index.py
+```
+
+
 ## Comparison: Expense Tracker v2 vs Password Vault v1
 
 ```
