@@ -14,6 +14,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200..1000&display=swap" rel="stylesheet">
 
+    <!-- load supabase library; defines global "supabase" for use in script.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- include this line to run css -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -21,20 +24,20 @@
 <!-- visible content -->
 <body>
     <div class="right-align">
-        <button id="log-in-btn">Log in</button>
-        <button id="sign-up-btn">Sign up</button>
+        <button id="log-in-btn">Log in/Sign up</button>
+        <button id="log-out-btn">Log Out</button>
     </div>
     <h1>Password Vault v1</h1>
 
     <!-- top -->
-    <div class="top-panel">
+    <div class="top-panel" id="top-panel">
         <h2>Saved Accounts</h2>
         <!-- render saved accounts from js (stored in array) -->
         <div id="saved-accounts"></div>
     </div>
 
     <!-- bottom -->
-    <div class="bottom-panel">
+    <div class="bottom-panel" id="bottom-panel">
         <h2>Actions</h2>
         <!-- show new account form button -->
         <button id="show-form-btn">Add new password</button>
@@ -53,7 +56,8 @@
         </div>
     </div>
 
-    <!-- include this line to run js-->
+    <!-- include this line to run js -->
+     <!-- elements must exist before this line to add functionality to them -->
     <script src="script.js"></script>
 </body>
 

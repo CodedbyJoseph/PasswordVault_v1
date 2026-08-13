@@ -9,15 +9,31 @@
 // await must be used within async function
 // calling the function w/o await will return a promise and move on
 
-// save user accounts into array, mutable
-let savedAccounts = [];
+// link supabase project, anon key only (public by design, RLS blocks it from accounts_table)
+// used for auth: log in/out and read the session
+const sb = supabase.createClient(
+    "https://hdapdfptttoncidgwems.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkYXBkZnB0dHRvbmNpZGd3ZW1zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU3OTMwMzIsImV4cCI6MjEwMTM2OTAzMn0.p7m9kGK0rr4jBYP1KCerjuHlMf35eRqE-hVXzLziDh8"
+);
 
-// link vars to each input box element
+// ------------------------------------------------------ LOG IN ON BUTTON CLICK
+const logInBtn = document.getElementById("log-in-btn");
+
+logInBtn.addEventListener("click", async () => {
+    await sb.auth.signInWithOAuth({
+        provider: "google",     // start a google login using the oauth client linked in supabase (id + secret)
+        options: {redirectTo: window.location.origin}   // redirect back to app once complete and start session
+    });
+});
+
+// ------------------------------------------------------ REFERENCE EACH INPUT BOX
 const websiteInput = document.getElementById("website-input");
 const emailInput = document.getElementById("email-input");
 const passwordInput = document.getElementById("password-input");
 
-// ------------------------------------------------------ FUNCTION TO FETCH SUPABASE DATA INTO savedAccounts
+// ------------------------------------------------------ FUNCTION TO FETCH SUPABASE DATA INTO ARRAY
+let savedAccounts = [];
+
 async function loadAccounts() {
     const response = await fetch("/api/accounts");
     savedAccounts = await response.json();  // [{id: 1, site: __, username: __, password: __}]
@@ -79,11 +95,33 @@ function renderAccounts() {
     });
 }
 
-// ------------------------------------------------------ INITIAL RENDER ON PAGE LOAD
-// loadaccounts and await real values (has promise due to async func above), then renderaccounts
-loadAccounts().then(renderAccounts);
+// ------------------------------------------------------ INITIAL RENDER ON NEW USER SESSION
+// link vars to the two panels
+const topPanel = document.getElementById("top-panel");
+const bottomPanel = document.getElementById("bottom-panel");
 
-// note: can't use await here b/c we are calling async func
+async function init() {
+    // obtain session info (returns data if user has logged in)
+    const result = await sb.auth.getSession();
+    const session = result.data.session;
+
+    // hide panels if no session active (logged out)
+    if (session === null) {
+        topPanel.classList.add("hidden");
+        bottomPanel.classList.add("hidden");
+        return;
+    }
+
+    // load accounts, then render accounts
+    await loadAccounts();
+    renderAccounts();
+}
+
+init()
+
+// NOTE:
+// supabase-js stores the session in the browser's localStorage, so it survives reloads, restarts, closes
+// stays logged in with the same session until sign out or clearing site data
 
 // ------------------------------------------------------ UNHIDE ACCOUNT FORM ON BUTTON CLICK
 // link vars to button and form
