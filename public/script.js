@@ -16,33 +16,58 @@ const sb = supabase.createClient(
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkYXBkZnB0dHRvbmNpZGd3ZW1zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU3OTMwMzIsImV4cCI6MjEwMTM2OTAzMn0.p7m9kGK0rr4jBYP1KCerjuHlMf35eRqE-hVXzLziDh8"
 );
 
-// ------------------------------------------------------ LOG IN ON BUTTON CLICK
+// -------------------------------------------------------------------------- LOG IN ON BUTTON CLICK
 const logInBtn = document.getElementById("log-in-btn");
 
 logInBtn.addEventListener("click", async () => {
     await sb.auth.signInWithOAuth({
         provider: "google",     // start a google login using the oauth client linked in supabase (id + secret)
-        options: {redirectTo: window.location.origin}   // redirect back to app once complete and start session
+        options: {redirectTo: window.location.origin}   // redirect back to app and start session
     });
+
+    // NOTE: logging in causes js to restart, automatically calls initialize() to initialize panels
+
 });
 
-// ------------------------------------------------------ REFERENCE EACH INPUT BOX
+// -------------------------------------------------------------------------- LOG OUT ON BUTTON CLICK
+const logOutBtn = document.getElementById("log-out-btn");
+
+logOutBtn.addEventListener("click", async () => {
+    await sb.auth.signOut();        // clear the session from localStorage
+    window.location.reload();       // restarts the js, initialize() hides the panels
+});
+
+// -------------------------------------------------------------------------- FUNCTION TO BUILD HEADER CONTAINING SESSION TOKEN
+// -------------------------------------------------------------------------- (UUID INSIDE) FOR FETCHES
+// assumed to never run while logged out — initialize() hides the panels with no session, so no fetch is reachable
+
+// python reads this header, verifies the token with supabase, extracts the uuid
+async function authHeaders() {
+    const result = await sb.auth.getSession();
+    const session = result.data.session;
+    return {Authorization: `Bearer ${session.access_token}`};
+}
+
+
+// -------------------------------------------------------------------------- REFERENCE EACH INPUT BOX
 const websiteInput = document.getElementById("website-input");
 const emailInput = document.getElementById("email-input");
 const passwordInput = document.getElementById("password-input");
 
-// ------------------------------------------------------ FUNCTION TO FETCH SUPABASE DATA INTO ARRAY
+// -------------------------------------------------------------------------- FUNCTION TO FETCH SUPABASE DATA INTO ARRAY
 let savedAccounts = [];
 
 async function loadAccounts() {
-    const response = await fetch("/api/accounts");
+    const response = await fetch("/api/accounts", {
+        headers: await authHeaders()     // send token containing uuid to the fastapi route to identify user
+    });
     savedAccounts = await response.json();  // [{id: 1, site: __, username: __, password: __}]
 }
 
+// -------------------------------------------------------------------------- FUNCTION TO RENDER ALL ACCOUNTS
 // link var to parent html div element
 const container = document.getElementById("saved-accounts");
 
-// ------------------------------------------------------ FUNCTION TO RENDER ALL ACCOUNTS
 function renderAccounts() {
     // clear existing entries; avoid duplicated entries on rerender
     // innerHTML property allows us to change inner elements/contents and have them reflect immediately
@@ -86,7 +111,10 @@ function renderAccounts() {
         // new event listener that persists on each iteration, each button gets own listener
         deleteBtn.addEventListener("click", async () => {
             // delete row from database by id
-            await fetch(`/api/accounts/${entry.id}`, {method: "DELETE"});
+            await fetch(`/api/accounts/${entry.id}`, {
+                method: "DELETE",
+                headers: await authHeaders()
+            });
 
             // re-load accounts, then re-render
             await loadAccounts();
@@ -95,12 +123,14 @@ function renderAccounts() {
     });
 }
 
-// ------------------------------------------------------ INITIAL RENDER ON NEW USER SESSION
+// -------------------------------------------------------------------------- FUNCTION TO DETERMINE IF PANELS RENDER
+// runs on every page load — hides panels when logged out, loads the vault when logged in
+
 // link vars to the two panels
 const topPanel = document.getElementById("top-panel");
 const bottomPanel = document.getElementById("bottom-panel");
 
-async function init() {
+async function initialize() {
     // obtain session info (returns data if user has logged in)
     const result = await sb.auth.getSession();
     const session = result.data.session;
@@ -112,18 +142,19 @@ async function init() {
         return;
     }
 
-    // load accounts, then render accounts
+    // load accounts, render accounts (therefore, session exists -> panels left visible -> load and render accounts)
+
     await loadAccounts();
     renderAccounts();
 }
 
-init()
+initialize()    // this will re-run on every js refresh (every log in log out)
 
 // NOTE:
 // supabase-js stores the session in the browser's localStorage, so it survives reloads, restarts, closes
 // stays logged in with the same session until sign out or clearing site data
 
-// ------------------------------------------------------ UNHIDE ACCOUNT FORM ON BUTTON CLICK
+// -------------------------------------------------------------------------- UNHIDE ACCOUNT FORM ON BUTTON CLICK
 // link vars to button and form
 const showFormBtn = document.getElementById("show-form-btn");
 const form = document.getElementById("add-account-form");
@@ -133,7 +164,7 @@ showFormBtn.addEventListener("click", () => {
     form.classList.remove("hidden");
 });
 
-// ------------------------------------------------------ FUNCTION TO VALIDATE ENTRY INPUTS
+// -------------------------------------------------------------------------- FUNCTION TO VALIDATE ENTRY INPUTS
 // link var to html error message
 const errorMessage = document.getElementById("err-msg")
 
@@ -150,7 +181,7 @@ function validateEntry() {
 }
 
 
-// ------------------------------------------------------ SAVE AND RENDER NEW ENTRY ON BUTTON CLICK
+// -------------------------------------------------------------------------- SAVE AND RENDER NEW ENTRY ON BUTTON CLICK
 // link var to button
 const saveAccount = document.getElementById("save-new-account-btn")
 
@@ -162,10 +193,13 @@ saveAccount.addEventListener("click", async () => {
 
     // check is valid
     if (isValid === true) {
+        const headers = await authHeaders();
+        headers["Content-Type"] = "application/json";
+
         // post new entry into database
         await fetch("/api/accounts", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: headers,
             body: JSON.stringify({site: site, username: username, password: password})
         });
 

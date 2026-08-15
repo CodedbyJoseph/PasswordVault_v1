@@ -2,7 +2,7 @@
 
 A simple full-stack password vault. Users sign in with Google.
 
-This is a learning project — kept intentionally simple, with no security considerations
+This is a learning project — kept intentionally simple, with minimal security considerations; only prevents unauthorized http requests
 
 ## Stack
 

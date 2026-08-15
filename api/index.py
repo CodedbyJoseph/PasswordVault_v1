@@ -1,7 +1,6 @@
 # file purpose:
-# - create database using supabase via python fastAPI
-# - store accounts permanently via table called "accounts_table"
-# - serverless function
+# - connect to supabase database via python fastAPI
+# - serverless function hosted by vercel that responds to fetches
 # - RESTful API
 
 # FastAPI framework automates:
