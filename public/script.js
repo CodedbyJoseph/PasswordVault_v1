@@ -59,7 +59,7 @@ let savedAccounts = [];
 
 async function loadAccounts() {
     const response = await fetch("/api/accounts", {
-        headers: await authHeaders()     // send token containing uuid to the fastapi route to identify user
+        headers: await authHeaders()     // send token containing uuid to the fastapi function for the fetch
     });
     savedAccounts = await response.json();  // [{id: 1, site: __, username: __, password: __}]
 }
@@ -200,7 +200,7 @@ saveAccount.addEventListener("click", async () => {
         await fetch("/api/accounts", {
             method: "POST",
             headers: headers,
-            body: JSON.stringify({site: site, username: username, password: password})
+            body: JSON.stringify({site: site, username: username, password: password})  // convert object to json text — http bodies are text only
         });
 
         websiteInput.value = "";

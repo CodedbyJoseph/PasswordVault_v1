@@ -9,7 +9,7 @@
 # - convert Python data into JSON text for the response
 # - parse incoming JSON request bodies into Python objects
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Header
 from supabase import create_client
 import os
 
@@ -35,20 +35,33 @@ app = FastAPI()
 
 # ------------------------------------------------------ GET/POST/DEL FUNCTIONS
 
-# call Supabase API to get accounts table data
+# call Supabase API to return accounts data table
 @app.get("/api/accounts")   # "/api" required by vercel.json rewrite, "/accounts" personally named
-def get_accounts():
-    response = supabase.table("accounts_table").select("*").execute()
+def get_accounts(authorization: str = Header(...)):    # parameter meaning: store authorization header from fetch, if DNE request rejected
+    # extract uuid from token                          # this prevents fraud requests from working (ex. public user sends curl req)
+    token = authorization.split(" ")[1]
+    uid = supabase.auth.get_user(token).user.id
+
+    # return only the data that belongs to the user
+    response = supabase.table("accounts_table").select("*").eq("user_id", uid).execute()
     return response.data        # list of dictionaries [{"id": 1, "site": __, "username": __, "password": __}]
 
-# insert new entry into accounts table
+# post new entry into accounts data table
 @app.post("/api/accounts")
-def add_account(entry: dict):
+def add_account(entry: dict, authorization: str = Header(...)):   # parameter 1: store JSON body from fetch and parse into "entry" dict
+    token = authorization.split(" ")[1]
+    uid = supabase.auth.get_user(token).user.id
+
+    # entry's user_id column contains uuid
+    entry["user_id"] = uid
     response = supabase.table("accounts_table").insert(entry).execute()
     return response.data
 
 # delete entry with matching id
 @app.delete("/api/accounts/{id}")
-def delete_account(id: int):
-    supabase.table("accounts_table").delete().eq("id", id).execute()
+def delete_account(id: int, authorization: str = Header(...)):    # parameter 1: store {id} from path in var "id"
+    token = authorization.split(" ")[1]
+    uid = supabase.auth.get_user(token).user.id
+    
+    supabase.table("accounts_table").delete().eq("id", id).eq("user_id", uid).execute()
     return {"deleted": id}
