@@ -49,10 +49,8 @@ row scoping     |  .eq("user_id", uid) in api/index.py
 5. Frontend: wire log in — click redirects to google sign-in page and redirects back
 6. Frontend: initialize vault render if session exists
 7. Frontend: wire log out — click deletes rendered vault
-8. verify account creation: log in, find the new user in supabase's auth table
 9. Backend: wire all three request functions to only get/post/del a logged in user's own data, using uuids
    --> Only allow authorized requests (REFER TO "Preventing Unauthorized GET/POST/DEL Requests")
-10. verify scoping: log in with a second google account — its vault must be empty
 ```
 
 ## Preventing Unauthorized GET/POST/DEL Requests

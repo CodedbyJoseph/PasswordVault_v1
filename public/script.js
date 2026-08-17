@@ -22,7 +22,10 @@ const logInBtn = document.getElementById("log-in-btn");
 logInBtn.addEventListener("click", async () => {
     await sb.auth.signInWithOAuth({
         provider: "google",     // start a google login using the oauth client linked in supabase (id + secret)
-        options: {redirectTo: window.location.origin}   // redirect back to app and start session
+        options: {
+            redirectTo: window.location.origin,  // redirect back to app and start session
+            queryParams: {prompt: "select_account"}   // force google to show the account picker
+        }
     });
 
     // NOTE: logging in causes js to restart, automatically calls initialize() to initialize panels
