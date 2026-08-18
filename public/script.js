@@ -36,16 +36,16 @@ logInBtn.addEventListener("click", async () => {
 const logOutBtn = document.getElementById("log-out-btn");
 
 logOutBtn.addEventListener("click", async () => {
-    await sb.auth.signOut();        // clear the session from localStorage
+    await sb.auth.signOut();        // clear the session from browser's localStorage
     window.location.reload();       // restarts the js, initialize() hides the panels
 });
 
-// -------------------------------------------------------------------------- FUNCTION TO BUILD HEADER CONTAINING SESSION TOKEN
-// -------------------------------------------------------------------------- (UUID INSIDE) FOR FETCHES
+// -------------------------------------------------------------------------- FUNCTION TO GET SESSION TOKEN W/ UUID FOR FETCHES
 // assumed to never run while logged out — initialize() hides the panels with no session, so no fetch is reachable
 
-// python reads this header, verifies the token with supabase, extracts the uuid
+// fastapi reads this header
 async function authHeaders() {
+    // read session from localStorage and extract token
     const result = await sb.auth.getSession();
     const session = result.data.session;
     return {Authorization: `Bearer ${session.access_token}`};
@@ -64,7 +64,7 @@ async function loadAccounts() {
     const response = await fetch("/api/accounts", {
         headers: await authHeaders()     // send token containing uuid to the fastapi function for the fetch
     });
-    savedAccounts = await response.json();  // [{id: 1, site: __, username: __, password: __}]
+    savedAccounts = await response.json();   // [{id: 1, site: __, username: __, password: __, user_id: __}]
 }
 
 // -------------------------------------------------------------------------- FUNCTION TO RENDER ALL ACCOUNTS

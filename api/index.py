@@ -37,14 +37,16 @@ app = FastAPI()
 
 # call Supabase API to return accounts data table
 @app.get("/api/accounts")   # "/api" required by vercel.json rewrite, "/accounts" personally named
-def get_accounts(authorization: str = Header(...)):    # parameter meaning: store authorization header from fetch, if DNE request rejected
-    # extract uuid from token                          # this prevents fraud requests from working (ex. public user sends curl req)
+def get_accounts(authorization: str = Header(...)):    # parameter meaning: store authorization header from fetch, if DNE then request rejected
     token = authorization.split(" ")[1]
-    uid = supabase.auth.get_user(token).user.id
+
+    # supabase verifies the signature (unique formula based) via calculation
+    # fraud: function fails and stops
+    uid = supabase.auth.get_user(token).user.id     # extract uuid from token
 
     # return only the data that belongs to the user
     response = supabase.table("accounts_table").select("*").eq("user_id", uid).execute()
-    return response.data        # list of dictionaries [{"id": 1, "site": __, "username": __, "password": __}]
+    return response.data        # list of dictionaries [{"id": 1, "site": __, "username": __, "password": __, "user_id": __}]
 
 # post new entry into accounts data table
 @app.post("/api/accounts")
