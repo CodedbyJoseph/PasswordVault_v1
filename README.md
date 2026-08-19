@@ -2,17 +2,17 @@
 
 A simple full-stack password vault. Users sign in with Google.
 
-This is a learning project — kept intentionally simple, with minimal security considerations; only prevents unauthorized http requests
+This is a learning project — kept simple; prevents unauthorized http requests
 
 ## Stack
 
-| Layer      | Tech                      |
-|------------|---------------------------|
-| Frontend   | HTML, CSS, JavaScript     |
-| Backend    | Python + FastAPI          |
-| Auth       | Google OAuth              |
-| Database   | Supabase (Postgres)       |
-| Hosting    | Vercel                    |
+| Layer      | Tech                        |
+|------------|-----------------------------|
+| Frontend   | HTML, CSS, JavaScript       |
+| Backend    | Python + FastAPI            |
+| Auth       | Supabase Auth, Google OAuth |
+| Database   | Supabase (Postgres)         |
+| Hosting    | Vercel                      |
 
 ## How it works
 
