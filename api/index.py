@@ -1,7 +1,7 @@
 # file purpose:
 # - connect to supabase database via python fastAPI
 # - fastAPI enables http requests (get/post/del) to database
-# - serverless function hosted by vercel that responds to fetches (vercel.json routes to index.py)
+# - serverless function hosted by vercel that responds to fetches (vercel detects fastapi app and routes /api/* to it)
 # - RESTful API
 
 from fastapi import FastAPI, Header
@@ -16,7 +16,7 @@ supabase = create_client(
 )
 
 # js fetch     → sends HTTP request (GET/POST/DELETE) to fastapi app via Vercel server
-# Vercel       → reads vercel.json, picks the file (index.py), invokes its "app" callable
+# Vercel       → detects the fastapi app and hands it the request
 # fastapi app  → matches method + path to the right function below
 # function     → retrieves/modifies database data via HTTP request
 # return       → fastapi serializes the result to JSON → back to js fetch
@@ -29,7 +29,7 @@ app = FastAPI()
 # ------------------------------------------------------ GET/POST/DEL FUNCTIONS
 
 # call Supabase API to return accounts data table
-@app.get("/api/accounts")   # "/api" required by vercel.json rewrite, "/accounts" personally named
+@app.get("/api/accounts")   # path js fetches; personally named
 def get_accounts(authorization: str = Header(...)):    # parameter meaning: store authorization header from fetch, if DNE then request rejected
     token = authorization.split(" ")[1]
 
