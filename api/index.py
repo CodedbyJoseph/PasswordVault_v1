@@ -1,13 +1,8 @@
 # file purpose:
 # - connect to supabase database via python fastAPI
-# - serverless function hosted by vercel that responds to fetches
+# - fastAPI enables http requests (get/post/del) to database
+# - serverless function hosted by vercel that responds to fetches (vercel.json routes to index.py)
 # - RESTful API
-
-# FastAPI framework automates:
-# - parse raw incoming HTTP requests
-# - figure out which URL/method was requested
-# - convert Python data into JSON text for the response
-# - parse incoming JSON request bodies into Python objects
 
 from fastapi import FastAPI, Header
 from supabase import create_client
@@ -20,13 +15,11 @@ supabase = create_client(
     # this key ignores rls (security measure that prevents supabase data access w/o policies)
 )
 
-# ------------------------------------------------------ INITIATE SERVERLESS FUNCTION
-# purpose: JS and Python are separate programs, must communicate over HTTP
-
-# fetch    → sends HTTP request (GET/POST/DELETE) to the Vercel server
-# Vercel   → reads vercel.json, picks the file (index.py), invokes its "app" callable
-# app      → matches method + path to the right function below
-# function → returns Python data, FastAPI serializes it to JSON text → back to fetch
+# js fetch     → sends HTTP request (GET/POST/DELETE) to fastapi app via Vercel server
+# Vercel       → reads vercel.json, picks the file (index.py), invokes its "app" callable
+# fastapi app  → matches method + path to the right function below
+# function     → retrieves/modifies database data via HTTP request
+# return       → fastapi serializes the result to JSON → back to js fetch
 
 app = FastAPI()
 
@@ -57,7 +50,7 @@ def add_account(entry: dict, authorization: str = Header(...)):   # parameter 1:
     # entry's user_id column contains uuid
     entry["user_id"] = uid
     response = supabase.table("accounts_table").insert(entry).execute()
-    return response.data
+    return response.data        # return required, value optional and not used; useful in devtools to confirm what was stored
 
 # delete entry with matching id
 @app.delete("/api/accounts/{id}")

@@ -35,10 +35,12 @@ STAGE                    |  COMPONENTS                               |  RUN/TEST
 
 ## SECURITY MODEL
 ```
-trust boundary  |  FastAPI (the only path to accounts_table)
-RLS             |  on, no policies — locks public anon key in js from accessing data
-ownership       |  all get/post/del requests are row-scoped to only logged in user
-signed token    |  uuid comes from supabase's verified token, not the request — forged uuids/tokens cant get through
+RLS              |  on w/ no policies — locks public anon key in js from accessing data
+database access |  FastAPI is the only path in — verifies every request first
+ownership        |  all get/post/del requests are row-scoped to only logged in user
+signed token     |  uuid comes from supabase's verified token, not the request — forged uuids/tokens cant get through
+
+Note: chose python FastAPI + service_role key (bypass rls) combo instead of js + rls policies combo to talk to database because building the api layer is a goal of this project
 ```
 
 ## Stage 3 app-user-auth architecture
