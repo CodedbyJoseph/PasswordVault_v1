@@ -10,8 +10,12 @@ import os
 
 # ------------------------------------------------------ LINK SUPABASE PROJECT
 supabase = create_client(
-    os.environ.get("SUPABASE_URL"), # retrieve supabase url (read from env)
-    os.environ.get("SUPABASE_KEY")  # retrieve supabase service_role key (read from env)
+    os.environ.get("SUPABASE_URL"), # retrieve supabase url
+    os.environ.get("SUPABASE_KEY")  # retrieve supabase service_role key
+
+    # local dev: url + key retrieved from load_dotenv() in local_server.py
+    # vercel prod: url + key retrieved from vercel dashboard
+
     # this key ignores rls (security measure that prevents supabase data access w/o policies)
 )
 

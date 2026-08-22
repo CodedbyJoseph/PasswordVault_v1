@@ -12,7 +12,7 @@ logic      |  python + fastAPI
 database   |  supabase Postgres
 
 APP RUN
-local dev  |  vercel dev
+local dev  |  uvicorn
 deployed   |  vercel
 ```
 
@@ -27,16 +27,16 @@ CON: Vercel is designed to support serverless functions, FastAPI works best as a
 ```
 STAGE                    |  COMPONENTS                               |  RUN/TEST
 1. UI                    |  html, css, js                            |  fake hardcoded data, live server
-2. logic and database    |  python, js fetch, fastAPI, supabase      |  real database, vercel dev
-3. auth + per-user data  |  js, python, supabase auth, google oauth  |  vercel dev
-4. polish UI + UX        |  html, css, js, python                    |  vercel dev
+2. logic and database    |  python, js fetch, fastAPI, supabase      |  real database, uvicorn
+3. auth + per-user data  |  js, python, supabase auth, google oauth  |  uvicorn
+4. polish UI + UX        |  html, css, js, python                    |  uvicorn
 5. deploy                |  push to vercel                           |  vercel --prod
 ```
 
 ## SECURITY MODEL
 ```
 RLS              |  on w/ no policies — locks public anon key in js from accessing data
-database access |  FastAPI is the only path in — verifies every request first
+database access  |  FastAPI is the only path in — verifies every request first
 ownership        |  all get/post/del requests are row-scoped to only logged in user
 signed token     |  uuid comes from supabase's verified token, not the request — forged uuids/tokens cant get through
 
@@ -88,32 +88,3 @@ Barriers stopping unauthorized requests:
 1 - header (authorization type) required
 2 - signature verified
 ```
-
-## Comparison: Expense Tracker v2 vs Password Vault v1
-```
-FRONTEND
-Structure:                 tkinter  |  html
-Style:                     tkinter  |  css
-Behaviour:                 tkinter  |  js
-
-BACKEND
-user auth:                    NONE  |  google Oauth
-logic:                      python  |  python + fastAPI
-database:                     JSON  |  supabase Postgres
-
-APP RUN
-local dev:              python cmd  |  vercel dev
-deployed:                     NONE  |  vercel
-```
-
-
-Vercel Dev Setup Instructions:
-this app requires public and api folder
-1. npm install -g vercel — the CLI.
-2. vercel login — authenticates your machine to your Vercel account.
-3. cd into the project folder.
-4. vercel dev — on first run it prompts:
-    - Set up and develop this project? → Enter
-    - Which scope? → your account
-    - Link to existing project? → No, if it's new
-    - Project name / directory → Enter for defaults

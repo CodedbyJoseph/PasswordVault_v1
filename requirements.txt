@@ -1,5 +1,5 @@
-# Python packages (must be pip installed)
-# Vercel dev / deploy installs everything in this file into its infrastructure allocated for this app 
+# Python packages installed into the Vercel serverless function on deploy.
+# Local-only dev tools live in requirements-dev.txt.
 
 fastapi~=0.141.1
 supabase~=2.31.0

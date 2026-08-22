@@ -1,7 +1,6 @@
 .env
 __pycache__/
 .vercel/
-node_modules/
+.venv/
 .vercel
 .env*
-STAGE3.md

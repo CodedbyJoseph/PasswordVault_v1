@@ -1,0 +1,8 @@
+# Local development only. Never deployed — Vercel reads requirements.txt alone.
+# Python packages that need to be installed for local dev
+# pip install -r requirements-dev.txt
+
+-r requirements.txt
+
+uvicorn[standard]~=0.52.4
+python-dotenv~=1.2.3
